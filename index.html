@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>值班白板系統</title>
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
   <style>
     body {
       font-family: sans-serif;
@@ -16,12 +17,15 @@
       display: flex;
       justify-content: space-around;
       margin-top: 20px;
+      flex-wrap: wrap;
     }
     .column {
       width: 30%;
+      min-width: 200px;
       background: white;
       border-radius: 8px;
       padding: 10px;
+      margin-bottom: 15px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
     .column h3 {
@@ -32,8 +36,8 @@
       padding: 8px;
       border-radius: 5px;
       background-color: #b7eb8f;
-      cursor: move;
       text-align: center;
+      touch-action: none;
     }
     #result {
       white-space: pre-line;
@@ -71,26 +75,19 @@
 
   <script>
     const names = ['人員1','人員2','人員3','人員4','人員5','人員6','人員7','人員8','人員9','人員10'];
-    const columns = ['onDuty', 'off', 'backup'];
-
     names.forEach(name => {
       const div = document.createElement('div');
       div.className = 'name';
-      div.draggable = true;
       div.textContent = name;
-      div.ondragstart = e => e.dataTransfer.setData('text', name);
       document.getElementById('onDuty').appendChild(div);
     });
 
-    columns.forEach(id => {
-      const col = document.getElementById(id);
-      col.ondragover = e => e.preventDefault();
-      col.ondrop = e => {
-        e.preventDefault();
-        const name = e.dataTransfer.getData('text');
-        const div = Array.from(document.querySelectorAll('.name')).find(d => d.textContent === name);
-        if (div) col.appendChild(div);
-      };
+    ['onDuty', 'off', 'backup'].forEach(id => {
+      new Sortable(document.getElementById(id), {
+        group: 'shared',
+        animation: 150,
+        ghostClass: 'ghost'
+      });
     });
 
     function generateMessage() {
