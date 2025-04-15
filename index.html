@@ -90,3 +90,77 @@
         <div class="dropzone" id="leader"></div>
       </div>
       <div class="role-row">
+        <div>
+          <div class="title">特搜16</div>
+          <div class="dropzone" id="car16"></div>
+        </div>
+        <div>
+          <div class="title">特搜61</div>
+          <div class="dropzone" id="car61"></div>
+        </div>
+        <div>
+          <div class="title">特搜91</div>
+          <div class="dropzone" id="car91"></div>
+        </div>
+        <div>
+          <div class="title">特搜71</div>
+          <div class="dropzone" id="car71"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button onclick="generateMessage()">產生出勤訊息</button>
+  <div id="result"></div>
+
+  <script>
+    const names = ['李兆麟', '陳典宏', '朱健銘', '吳耀堂', '李孟勲', '張國榮', '王曉明'];
+
+    names.forEach(name => {
+      const div = document.createElement('div');
+      div.className = 'name';
+      div.textContent = name;
+      document.getElementById('pool').appendChild(div);
+    });
+
+    ['pool','leader','car16','car61','car91','car71'].forEach(id => {
+      new Sortable(document.getElementById(id), {
+        group: 'shared',
+        animation: 150,
+        ghostClass: 'ghost'
+      });
+    });
+
+    function getList(id) {
+      return Array.from(document.getElementById(id).querySelectorAll('.name'))
+        .map(d => d.textContent);
+    }
+
+    function generateMessage() {
+      const leader = getList('leader');
+      const car16 = getList('car16');
+      const car61 = getList('car61');
+      const car91 = getList('car91');
+      const car71 = getList('car71');
+
+      let message = `特搜分隊火警出勤人車：\n`;
+      if (leader.length > 0) {
+        message += `帶隊官：${leader[0]}小隊長（特搜01）\n`;
+      }
+      if (car16.length > 0) {
+        message += `特搜16：${car16.join('、')}\n`;
+      }
+      if (car61.length > 0) {
+        message += `特搜61：${car61.join('、')}\n`;
+      }
+      if (car91.length > 0) {
+        message += `特搜91：${car91.join('、')}\n`;
+      }
+      if (car71.length > 0) {
+        message += `特搜71：${car71.join('、')}\n`;
+      }
+
+      document.getElementById('result').textContent = message.trim();
+    }
+  </script>
+</body>
+</html>
