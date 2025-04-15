@@ -42,22 +42,16 @@
       justify-content: space-between;
       flex-wrap: wrap;
     }
-    .dropzone {
-      flex: 1;
-      min-width: 120px;
-      min-height: 60px;
+    .dropzone, .leader-dropzone {
       border: 1px dashed #aaa;
       padding: 5px;
+      min-height: 60px;
+      min-width: 120px;
       display: flex;
       flex-wrap: wrap;
     }
     .leader-dropzone {
-      border: 1px dashed #aaa;
-      padding: 5px;
-      min-height: 60px;
       min-width: 200px;
-      display: flex;
-      flex-wrap: wrap;
     }
     .name {
       margin: 5px;
@@ -96,7 +90,7 @@
     }
     textarea {
       width: 100%;
-      height: 80px;
+      height: 100px;
       margin-top: 10px;
     }
   </style>
@@ -137,40 +131,49 @@
 
   <div id="nameInputArea">
     <h3>✍️ 修改人員名單</h3>
-    <label for="names">請輸入姓名（用逗號分隔）：</label>
-    <textarea id="names">李兆麟,陳典宏,朱健銘,吳耀堂,李孟勲,張國榮,王曉明</textarea>
+    <label for="names">請輸入完整人員資訊（用換行分隔，每行如：李兆麟小隊長（特搜01））：</label>
+    <textarea id="names">李兆麟小隊長（特搜01）
+王春傑小隊長（特搜02）
+潘威至小隊長（特搜03）
+周承則隊員（特搜04）
+吳耀堂隊員（特搜05）</textarea>
     <button onclick="updateNames()">更新人員名單</button>
   </div>
 
   <script>
-    let allNames = [];
+    let allPersons = [];
     const maxItems = 10;
 
-    function createMagnet(name) {
+    function extractName(full) {
+      return full.split(/\s|（/)[0];
+    }
+
+    function createMagnet(person) {
       const div = document.createElement('div');
       div.className = 'name';
-      div.textContent = name;
+      div.dataset.full = person;
+      div.textContent = extractName(person);
       return div;
     }
 
     function populateNames() {
       const pool = document.getElementById('pool');
       pool.innerHTML = '<div class="title">人員</div>';
-      allNames.forEach(name => {
-        const div = createMagnet(name);
+      allPersons.forEach(person => {
+        const div = createMagnet(person);
         pool.appendChild(div);
       });
     }
 
     function updateNames() {
       const input = document.getElementById('names').value;
-      allNames = input.split(',').map(n => n.trim()).filter(n => n);
+      allPersons = input.split('\n').map(n => n.trim()).filter(n => n);
       populateNames();
     }
 
     function getList(id) {
       return Array.from(document.getElementById(id).querySelectorAll('.name'))
-        .map(d => d.textContent);
+        .map(d => d.dataset.full);
     }
 
     function generateMessage() {
@@ -182,7 +185,7 @@
 
       let message = `特搜分隊火警出勤人車：\n`;
       if (leader.length > 0) {
-        message += `帶隊官：${leader[0]}小隊長（特搜01）\n`;
+        message += `帶隊官：${leader[0]}\n`;
       }
       if (car16.length > 0) {
         message += `特搜16：${car16.join('、')}\n`;
@@ -200,7 +203,6 @@
       document.getElementById('result').textContent = message.trim();
     }
 
-    // 初始化排序區域
     ['pool','leader','car16','car61','car91','car71'].forEach(id => {
       new Sortable(document.getElementById(id), {
         group: 'shared',
@@ -211,16 +213,16 @@
           const from = evt.from;
           const item = evt.item;
 
-          // 限制數量
           if (to.children.length > maxItems + 1) {
             to.removeChild(item);
             alert('每個區塊最多只能放置 10 位人員');
             return;
           }
 
-          // 帶隊官：拖入時複製，但拖出會自動移除
           if (to.id === 'leader') {
             const clone = item.cloneNode(true);
+            clone.textContent = item.dataset.full;
+            clone.dataset.full = item.dataset.full;
             from.insertBefore(clone, from.children[evt.oldIndex]);
           } else if (from.id === 'leader') {
             item.remove();
@@ -229,7 +231,6 @@
       });
     });
 
-    // 預設初始化
     document.addEventListener('DOMContentLoaded', () => {
       updateNames();
     });
