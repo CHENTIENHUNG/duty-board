@@ -45,7 +45,7 @@
     .dropzone {
       border: 1px dashed #aaa;
       padding: 5px;
-      height: 800px;
+      height: 400px;
       width: 180px;
       display: flex;
       flex-wrap: wrap;
@@ -63,10 +63,18 @@
     .name {
       margin: 5px;
       padding: 8px;
+      width: 150px;
+      height: 30px;
+      font-size: 14px;
+      line-height: 1.2;
+      overflow: hidden;
       border-radius: 5px;
       background-color: #b7eb8f;
       text-align: center;
       touch-action: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     #result {
       white-space: pre-line;
@@ -176,17 +184,21 @@
       populateNames();
     }
 
-    function getList(id) {
+    function extractNameOnly(full) {
+      return full.split(/[\s（]/)[0];
+    }
+
+    function getList(id, simplified = false) {
       return Array.from(document.getElementById(id).querySelectorAll('.name'))
-        .map(d => d.dataset.full);
+        .map(d => simplified ? extractNameOnly(d.dataset.full) : d.dataset.full);
     }
 
     function generateMessage() {
       const leader = getList('leader');
-      const car16 = getList('car16');
-      const car61 = getList('car61');
-      const car91 = getList('car91');
-      const car71 = getList('car71');
+      const car16 = getList('car16', true);
+      const car61 = getList('car61', true);
+      const car91 = getList('car91', true);
+      const car71 = getList('car71', true);
 
       let message = `特搜分隊火警出勤人車：\n`;
       if (leader.length > 0) {
