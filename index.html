@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>值班白板系統</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background: #f0f0f0;
+    }
+    h2 {
+      text-align: center;
+    }
+    .board {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    .column {
+      width: 30%;
+      background: white;
+      border-radius: 8px;
+      padding: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .column h3 {
+      text-align: center;
+    }
+    .name {
+      margin: 5px;
+      padding: 8px;
+      border-radius: 5px;
+      background-color: #b7eb8f;
+      cursor: move;
+      text-align: center;
+    }
+    #result {
+      white-space: pre-line;
+      margin-top: 20px;
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 16px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+</head>
+<body>
+  <h2>📋 值班排班白板</h2>
+  <div class="board">
+    <div class="column" id="onDuty">
+      <h3>📋 值班人員</h3>
+    </div>
+    <div class="column" id="off">
+      <h3>💤 休假人員</h3>
+    </div>
+    <div class="column" id="backup">
+      <h3>🆘 備用名單</h3>
+    </div>
+  </div>
+  <button onclick="generateMessage()">送出 LINE 訊息內容</button>
+  <div id="result"></div>
+
+  <script>
+    const names = ['人員1','人員2','人員3','人員4','人員5','人員6','人員7','人員8','人員9','人員10'];
+    const columns = ['onDuty', 'off', 'backup'];
+
+    names.forEach(name => {
+      const div = document.createElement('div');
+      div.className = 'name';
+      div.draggable = true;
+      div.textContent = name;
+      div.ondragstart = e => e.dataTransfer.setData('text', name);
+      document.getElementById('onDuty').appendChild(div);
+    });
+
+    columns.forEach(id => {
+      const col = document.getElementById(id);
+      col.ondragover = e => e.preventDefault();
+      col.ondrop = e => {
+        e.preventDefault();
+        const name = e.dataTransfer.getData('text');
+        const div = Array.from(document.querySelectorAll('.name')).find(d => d.textContent === name);
+        if (div) col.appendChild(div);
+      };
+    });
+
+    function generateMessage() {
+      const getList = id =>
+        Array.from(document.getElementById(id).querySelectorAll('.name'))
+          .map(d => d.textContent).join('、') || '無';
+
+      const msg = `📋 今日值班人員：\n${getList('onDuty')}\n\n💤 休假人員：\n${getList('off')}\n\n🆘 備用人員：\n${getList('backup')}`;
+      document.getElementById('result').textContent = msg;
+    }
+  </script>
+</body>
+</html>
