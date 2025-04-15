@@ -42,17 +42,23 @@
       justify-content: space-between;
       flex-wrap: wrap;
     }
-    .dropzone, .leader-dropzone {
+    .dropzone {
       border: 1px dashed #aaa;
       padding: 5px;
-      height: 140px;
+      height: 800px;
       width: 180px;
       display: flex;
       flex-wrap: wrap;
       overflow-y: auto;
     }
     .leader-dropzone {
-      width: 200px;
+      border: 1px dashed #aaa;
+      padding: 5px;
+      height: 50px;
+      width: 180px;
+      display: flex;
+      flex-wrap: wrap;
+      overflow-y: auto;
     }
     .name {
       margin: 5px;
@@ -128,7 +134,8 @@
     </div>
   </div>
   <button onclick="generateMessage()">產生出勤訊息</button>
-  <button onclick="sendToLine()">📤 一鍵傳送到 LINE</button>
+  <button onclick="sendToLine()">📤 傳送到 LINE 分享介面</button>
+  <button onclick="copyAndOpenLINE()">📋 複製並開啟 LINE</button>
   <div id="result"></div>
 
   <div id="nameInputArea">
@@ -206,6 +213,17 @@
       const message = document.getElementById('result').textContent;
       const encoded = encodeURIComponent(message);
       window.open(`https://line.me/R/msg/text/?${encoded}`, '_blank');
+    }
+
+    function copyAndOpenLINE() {
+      generateMessage();
+      const message = document.getElementById('result').textContent;
+      navigator.clipboard.writeText(message).then(() => {
+        alert('訊息已複製，可至 LINE 群組貼上');
+        window.location.href = 'line://nv/chat';
+      }).catch(() => {
+        alert('複製失敗，請手動複製');
+      });
     }
 
     ['pool','leader','car16','car61','car91','car71'].forEach(id => {
