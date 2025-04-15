@@ -190,7 +190,10 @@
 
     function getList(id, simplified = false) {
       return Array.from(document.getElementById(id).querySelectorAll('.name'))
-        .map(d => simplified ? extractNameOnly(d.dataset.full) : d.dataset.full);
+        .map(d => {
+          const text = d.dataset.full;
+          return simplified ? text.replace(/(小隊長|隊員)?（[^）]*）/g, '').trim() : text;
+        });
     }
 
     function generateMessage() {
