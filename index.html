@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>值班白板系統</title>
+  <title>特搜出勤白板</title>
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
   <style>
     body {
@@ -13,23 +13,40 @@
     h2 {
       text-align: center;
     }
-    .board {
+    .container {
       display: flex;
-      justify-content: space-around;
-      margin-top: 20px;
       flex-wrap: wrap;
+      justify-content: space-between;
+      margin-top: 20px;
     }
     .column {
-      width: 30%;
-      min-width: 200px;
       background: white;
+      border: 2px solid black;
       border-radius: 8px;
       padding: 10px;
-      margin-bottom: 15px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      box-sizing: border-box;
+      margin-bottom: 20px;
     }
-    .column h3 {
-      text-align: center;
+    .person-pool {
+      width: 18%;
+      min-width: 140px;
+    }
+    .main-board {
+      width: 80%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .role-row {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    .dropzone {
+      flex: 1;
+      min-width: 120px;
+      margin: 5px;
+      min-height: 60px;
     }
     .name {
       margin: 5px;
@@ -55,49 +72,21 @@
       margin-left: auto;
       margin-right: auto;
     }
+    .title {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
   </style>
 </head>
 <body>
-  <h2>📋 值班排班白板</h2>
-  <div class="board">
-    <div class="column" id="onDuty">
-      <h3>📋 值班人員</h3>
+  <h2>🚒 特搜出勤白板</h2>
+  <div class="container">
+    <div class="column person-pool" id="pool">
+      <div class="title">人員</div>
     </div>
-    <div class="column" id="off">
-      <h3>💤 休假人員</h3>
-    </div>
-    <div class="column" id="backup">
-      <h3>🆘 備用名單</h3>
-    </div>
-  </div>
-  <button onclick="generateMessage()">送出 LINE 訊息內容</button>
-  <div id="result"></div>
-
-  <script>
-    const names = ['人員1','人員2','人員3','人員4','人員5','人員6','人員7','人員8','人員9','人員10'];
-    names.forEach(name => {
-      const div = document.createElement('div');
-      div.className = 'name';
-      div.textContent = name;
-      document.getElementById('onDuty').appendChild(div);
-    });
-
-    ['onDuty', 'off', 'backup'].forEach(id => {
-      new Sortable(document.getElementById(id), {
-        group: 'shared',
-        animation: 150,
-        ghostClass: 'ghost'
-      });
-    });
-
-    function generateMessage() {
-      const getList = id =>
-        Array.from(document.getElementById(id).querySelectorAll('.name'))
-          .map(d => d.textContent).join('、') || '無';
-
-      const msg = `📋 今日值班人員：\n${getList('onDuty')}\n\n💤 休假人員：\n${getList('off')}\n\n🆘 備用人員：\n${getList('backup')}`;
-      document.getElementById('result').textContent = msg;
-    }
-  </script>
-</body>
-</html>
+    <div class="column main-board">
+      <div>
+        <div class="title">帶隊官</div>
+        <div class="dropzone" id="leader"></div>
+      </div>
+      <div class="role-row">
