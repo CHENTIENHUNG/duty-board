@@ -51,6 +51,14 @@
       display: flex;
       flex-wrap: wrap;
     }
+    .leader-dropzone {
+      border: 1px dashed #aaa;
+      padding: 5px;
+      min-height: 60px;
+      min-width: 200px;
+      display: flex;
+      flex-wrap: wrap;
+    }
     .name {
       margin: 5px;
       padding: 8px;
@@ -79,6 +87,18 @@
       font-weight: bold;
       margin-bottom: 5px;
     }
+    #nameInputArea {
+      margin-top: 30px;
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    textarea {
+      width: 100%;
+      height: 80px;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
@@ -90,7 +110,7 @@
     <div class="column main-board">
       <div>
         <div class="title">帶隊官</div>
-        <div class="dropzone" id="leader"></div>
+        <div class="leader-dropzone" id="leader"></div>
       </div>
       <div class="role-row">
         <div>
@@ -115,43 +135,38 @@
   <button onclick="generateMessage()">產生出勤訊息</button>
   <div id="result"></div>
 
-  <script>
-    const names = ['李兆麟', '陳典宏', '朱健銘', '吳耀堂', '李孟勲', '張國榮', '王曉明'];
+  <div id="nameInputArea">
+    <h3>✍️ 修改人員名單</h3>
+    <label for="names">請輸入姓名（用逗號分隔）：</label>
+    <textarea id="names">李兆麟,陳典宏,朱健銘,吳耀堂,李孟勲,張國榮,王曉明</textarea>
+    <button onclick="updateNames()">更新人員名單</button>
+  </div>
 
-    names.forEach(name => {
+  <script>
+    let allNames = [];
+    const maxItems = 10;
+
+    function createMagnet(name) {
       const div = document.createElement('div');
       div.className = 'name';
       div.textContent = name;
-      div.dataset.origin = 'pool';
-      document.getElementById('pool').appendChild(div);
-    });
+      return div;
+    }
 
-    const maxItems = 10;
-    const allIds = ['pool','leader','car16','car61','car91','car71'];
-
-    allIds.forEach(id => {
-      new Sortable(document.getElementById(id), {
-        group: 'shared',
-        animation: 150,
-        ghostClass: 'ghost',
-        onAdd: function (evt) {
-          const target = evt.to;
-          if (target.id === 'leader') {
-            const clone = evt.item.cloneNode(true);
-            clone.dataset.origin = 'leader';
-            evt.from.insertBefore(clone, evt.from.children[evt.oldIndex]);
-          } else if (evt.from.id === 'leader' && evt.item.dataset.origin === 'leader') {
-            evt.item.remove();
-          }
-
-          // 限制最多 10 個磁鐵
-          if (target.children.length > maxItems) {
-            target.removeChild(evt.item);
-            alert('每個區塊最多只能放置 10 位人員');
-          }
-        }
+    function populateNames() {
+      const pool = document.getElementById('pool');
+      pool.innerHTML = '<div class="title">人員</div>';
+      allNames.forEach(name => {
+        const div = createMagnet(name);
+        pool.appendChild(div);
       });
-    });
+    }
+
+    function updateNames() {
+      const input = document.getElementById('names').value;
+      allNames = input.split(',').map(n => n.trim()).filter(n => n);
+      populateNames();
+    }
 
     function getList(id) {
       return Array.from(document.getElementById(id).querySelectorAll('.name'))
@@ -184,6 +199,40 @@
 
       document.getElementById('result').textContent = message.trim();
     }
+
+    // 初始化排序區域
+    ['pool','leader','car16','car61','car91','car71'].forEach(id => {
+      new Sortable(document.getElementById(id), {
+        group: 'shared',
+        animation: 150,
+        ghostClass: 'ghost',
+        onAdd: function (evt) {
+          const to = evt.to;
+          const from = evt.from;
+          const item = evt.item;
+
+          // 限制數量
+          if (to.children.length > maxItems + 1) {
+            to.removeChild(item);
+            alert('每個區塊最多只能放置 10 位人員');
+            return;
+          }
+
+          // 帶隊官：拖入時複製，但拖出會自動移除
+          if (to.id === 'leader') {
+            const clone = item.cloneNode(true);
+            from.insertBefore(clone, from.children[evt.oldIndex]);
+          } else if (from.id === 'leader') {
+            item.remove();
+          }
+        }
+      });
+    });
+
+    // 預設初始化
+    document.addEventListener('DOMContentLoaded', () => {
+      updateNames();
+    });
   </script>
 </body>
 </html>
