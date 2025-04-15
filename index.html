@@ -45,13 +45,14 @@
     .dropzone, .leader-dropzone {
       border: 1px dashed #aaa;
       padding: 5px;
-      min-height: 60px;
-      min-width: 120px;
+      height: 140px;
+      width: 180px;
       display: flex;
       flex-wrap: wrap;
+      overflow-y: auto;
     }
     .leader-dropzone {
-      min-width: 200px;
+      width: 200px;
     }
     .name {
       margin: 5px;
@@ -127,6 +128,7 @@
     </div>
   </div>
   <button onclick="generateMessage()">產生出勤訊息</button>
+  <button onclick="sendToLine()">📤 一鍵傳送到 LINE</button>
   <div id="result"></div>
 
   <div id="nameInputArea">
@@ -197,6 +199,13 @@
       }
 
       document.getElementById('result').textContent = message.trim();
+    }
+
+    function sendToLine() {
+      generateMessage();
+      const message = document.getElementById('result').textContent;
+      const encoded = encodeURIComponent(message);
+      window.open(`https://line.me/R/msg/text/?${encoded}`, '_blank');
     }
 
     ['pool','leader','car16','car61','car91','car71'].forEach(id => {
