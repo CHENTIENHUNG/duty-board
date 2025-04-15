@@ -45,8 +45,11 @@
     .dropzone {
       flex: 1;
       min-width: 120px;
-      margin: 5px;
       min-height: 60px;
+      border: 1px dashed #aaa;
+      padding: 5px;
+      display: flex;
+      flex-wrap: wrap;
     }
     .name {
       margin: 5px;
@@ -119,14 +122,34 @@
       const div = document.createElement('div');
       div.className = 'name';
       div.textContent = name;
+      div.dataset.origin = 'pool';
       document.getElementById('pool').appendChild(div);
     });
 
-    ['pool','leader','car16','car61','car91','car71'].forEach(id => {
+    const maxItems = 10;
+    const allIds = ['pool','leader','car16','car61','car91','car71'];
+
+    allIds.forEach(id => {
       new Sortable(document.getElementById(id), {
         group: 'shared',
         animation: 150,
-        ghostClass: 'ghost'
+        ghostClass: 'ghost',
+        onAdd: function (evt) {
+          const target = evt.to;
+          if (target.id === 'leader') {
+            const clone = evt.item.cloneNode(true);
+            clone.dataset.origin = 'leader';
+            evt.from.insertBefore(clone, evt.from.children[evt.oldIndex]);
+          } else if (evt.from.id === 'leader' && evt.item.dataset.origin === 'leader') {
+            evt.item.remove();
+          }
+
+          // 限制最多 10 個磁鐵
+          if (target.children.length > maxItems) {
+            target.removeChild(evt.item);
+            alert('每個區塊最多只能放置 10 位人員');
+          }
+        }
       });
     });
 
