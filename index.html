@@ -47,7 +47,7 @@
       padding: 5px;
       width: 180px;
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: column;
       gap: 4px;
       overflow-y: auto;
     }
@@ -62,7 +62,7 @@
       padding: 6px;
       width: 140px;
       height: 40px;
-      font-size: 20px;
+      font-size: 24px;
       line-height: 1.2;
       border-radius: 5px;
       background-color: #b7eb8f;
@@ -171,12 +171,14 @@
 </div>
 <script>
   let allPersons = [];
-  const maxItems = 10;
+  const maxItems = 999; // ✅ 無限制
 
   function createMagnet(person) {
     const div = document.createElement('div');
+    const match = person.match(/^(.*?)\s*[^（]*（特搜(\d+)）/);
+    const name = match ? `${match[1]}${match[2]}` : person;
     div.className = 'name';
-    div.textContent = person.replace(/(小隊長|隊員)?（特搜\d+）/g, '').trim();
+    div.textContent = name;
     div.dataset.full = person;
     return div;
   }
@@ -243,16 +245,11 @@
       group: 'shared',
       animation: 150,
       ghostClass: 'ghost',
+      direction: 'vertical', // ✅ 垂直排列
       onAdd: function (evt) {
         const to = evt.to;
         const from = evt.from;
         const item = evt.item;
-
-        if (to.children.length > maxItems + 1) {
-          to.removeChild(item);
-          alert('每個區塊最多只能放置 10 位人員');
-          return;
-        }
 
         if (to.id === 'leader') {
           const clone = item.cloneNode(true);
