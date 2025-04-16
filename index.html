@@ -42,39 +42,35 @@
       justify-content: space-between;
       flex-wrap: wrap;
     }
-    .dropzone {
+    .dropzone, .leader-dropzone {
       border: 1px dashed #aaa;
       padding: 5px;
-      height: 400px;
       width: 180px;
       display: flex;
       flex-wrap: wrap;
+      gap: 4px;
       overflow-y: auto;
+    }
+    .dropzone {
+      height: 400px;
     }
     .leader-dropzone {
-      border: 1px dashed #aaa;
-      padding: 5px;
       height: 50px;
-      width: 180px;
-      display: flex;
-      flex-wrap: wrap;
-      overflow-y: auto;
     }
     .name {
-      margin: 5px;
-      padding: 8px;
-      width: 150px;
-      height: 30px;
+      margin: 2px;
+      padding: 6px;
+      min-width: 130px;
       font-size: clamp(14px, 8vw, 28px);
-      line-height: 1.2;
-      overflow: hidden;
+      line-height: 1.3;
       border-radius: 5px;
       background-color: #b7eb8f;
       text-align: center;
       touch-action: none;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
+      word-break: break-word;
     }
     #result {
       white-space: pre-line;
@@ -111,10 +107,10 @@
       margin-top: 10px;
       font-size: clamp(14px, 7vw, 28px);
     }
-  </style> 
+  </style>
 </head>
 <body>
-  <h2> 特搜出勤白板</h2>
+  <h2>🚒 特搜出勤白板</h2>
   <div class="container">
     <div class="column person-pool" id="pool">
       <div class="title">人員</div>
@@ -144,6 +140,7 @@
       </div>
     </div>
   </div>
+
   <button onclick="generateMessage()">產生出勤訊息</button>
   <button onclick="sendToLine()">📤 傳送到 LINE 分享介面</button>
   <button onclick="copyAndOpenLINE()">📋 複製並開啟 LINE</button>
@@ -151,23 +148,8 @@
 
   <div id="nameInputArea">
     <h3>✍️ 修改人員名單</h3>
-    <label for="names">請輸入完整人員資訊（用換行分隔，每行如：李兆麟小隊長（特搜01））：</label>
-    <textarea id="names">李兆麟小隊長（特搜01）
-王春傑小隊長（特搜02）
-潘威至小隊長（特搜03）
-周承則隊員（特搜04）
-吳耀堂隊員（特搜05）
-劉馥銘隊員（特搜06）
-朱健銘隊員（特搜07）
-劉人槐隊員（特搜08）
-謝旭鎧隊員（特搜09）
-葉典書隊員（特搜10）
-陳典宏隊員（特搜11）
-陳彥輔隊員（特搜12）
-詹經宇隊員（特搜13）
-李孟勲隊員（特搜14）
-劉冠佑隊員（特搜15）
-黃煒修隊員（特搜16）</textarea>
+    <label for="names">請輸入完整人員資訊（每行如：李兆麟小隊長（特搜01））：</label>
+    <textarea id="names">李兆麟小隊長（特搜01）\n王春傑小隊長（特搜02）\n潘威至小隊長（特搜03）</textarea>
     <button onclick="updateNames()">更新人員名單</button>
   </div>
 
@@ -178,7 +160,7 @@
     function createMagnet(person) {
       const div = document.createElement('div');
       div.className = 'name';
-      div.textContent = person;
+      div.textContent = person.replace(/(小隊長|隊員)?（特搜\\d+）/g, '').trim();
       div.dataset.full = person;
       return div;
     }
@@ -194,20 +176,15 @@
 
     function updateNames() {
       const input = document.getElementById('names').value;
-      allPersons = input.split('\n').map(n => n.trim()).filter(n => n);
+      allPersons = input.split('\\n').map(n => n.trim()).filter(n => n);
       populateNames();
     }
 
-    function extractNameOnly(full) {
-      return full.split(/[\s（]/)[0];
-    }
-
     function getList(id, simplified = false) {
-      return Array.from(document.getElementById(id).querySelectorAll('.name'))
-        .map(d => {
-          const text = d.dataset.full;
-          return simplified ? text.replace(/(小隊長|隊員)?（[^）]*）/g, '').trim() : text;
-        });
+      return Array.from(document.getElementById(id).querySelectorAll('.name')).map(d => {
+        const text = d.dataset.full;
+        return simplified ? text.replace(/(小隊長|隊員)?（特搜\\d+）/g, '').trim() : text;
+      });
     }
 
     function generateMessage() {
@@ -217,21 +194,21 @@
       const car91 = getList('car91', true);
       const car71 = getList('car71', true);
 
-      let message = `特搜分隊火警出勤人車：\n`;
+      let message = `特搜分隊火警出勤人車：\\n`;
       if (leader.length > 0) {
-        message += `帶隊官：${leader[0]}\n`;
+        message += `帶隊官：${leader[0]}\\n`;
       }
       if (car16.length > 0) {
-        message += `特搜16：${car16.join('、')}\n`;
+        message += `特搜16：${car16.join('、')}\\n`;
       }
       if (car61.length > 0) {
-        message += `特搜61：${car61.join('、')}\n`;
+        message += `特搜61：${car61.join('、')}\\n`;
       }
       if (car91.length > 0) {
-        message += `特搜91：${car91.join('、')}\n`;
+        message += `特搜91：${car91.join('、')}\\n`;
       }
       if (car71.length > 0) {
-        message += `特搜71：${car71.join('、')}\n`;
+        message += `特搜71：${car71.join('、')}\\n`;
       }
 
       document.getElementById('result').textContent = message.trim();
