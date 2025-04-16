@@ -182,8 +182,8 @@
 
   function createMagnet(person) {
     const div = document.createElement('div');
-    const match = person.match(/^(.*?)\s*(小隊長|隊員)?（特搜(\d+)）/);
-    const name = match ? match[1] + '（' + match[3] + '）' : person;
+    const match = person.match(/^(.*?)\s*(小隊長|隊員)?(特搜(\d+))/);
+    const name = match ? match[1] + '(' + match[3] + ')' : person;
     div.className = 'name';
     div.textContent = name;
     div.dataset.full = person;
