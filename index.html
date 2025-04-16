@@ -28,11 +28,11 @@
       margin-bottom: 20px;
     }
     .person-pool {
-      width: 18%;
-      min-width: 140px;
+      width: 22%;
+      min-width: 160px;
     }
     .main-board {
-      width: 80%;
+      width: 76%;
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -45,26 +45,26 @@
     .dropzone, .leader-dropzone {
       border: 1px dashed #aaa;
       padding: 5px;
-      width: 180px;
+      width: 200px;
       display: flex;
       flex-direction: column;
       gap: 4px;
       overflow-y: auto;
     }
     .dropzone {
-      height: 400px;
+      height: 480px;
     }
     .leader-dropzone {
-      height: 50px;
+      height: 80px;
     }
     .name {
       margin: 4px;
-      padding: 8px;
+      padding: 10px;
       width: 180px;
       height: 60px;
       font-size: 36px;
       line-height: 1.3;
-      border-radius: 6px;
+      border-radius: 8px;
       background-color: #b7eb8f;
       text-align: center;
       touch-action: none;
@@ -82,18 +82,25 @@
       padding: 10px;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-      font-size: 20px;
+      font-size: 24px;
+    }
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 20px;
     }
     button {
       flex: 1;
-      padding: 20px;
+      padding: 24px;
       font-size: 32px;
       border-radius: 10px;
     }
     .title {
       font-weight: bold;
       margin-bottom: 5px;
-      font-size: 22px;
+      font-size: 26px;
     }
     #nameInputArea {
       margin-top: 30px;
@@ -104,20 +111,14 @@
     }
     textarea {
       width: 100%;
-      height: 100px;
+      height: 120px;
       margin-top: 10px;
-      font-size: 18px;
+      font-size: 20px;
     }
   </style>
-<script>
-  // ✅ 自動附加亂數參數避免快取（只有首次進入生效）
-  if (location.search === '') {
-    const version = '?v=' + Date.now();
-    location.href = location.pathname + version;
-  }
-</script>
 </head>
 <body>
+<h2>特搜出勤白板</h2>
 <div class="container">
   <div class="column person-pool" id="pool">
     <div class="title">人員</div>
