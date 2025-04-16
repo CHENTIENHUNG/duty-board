@@ -111,6 +111,13 @@
       font-size: 18px;
     }
   </style>
+<script>
+  // ✅ 自動附加亂數參數避免快取（只有首次進入生效）
+  if (location.search === '') {
+    const version = '?v=' + Date.now();
+    location.href = location.pathname + version;
+  }
+</script>
 </head>
 <body>
 <div class="container">
