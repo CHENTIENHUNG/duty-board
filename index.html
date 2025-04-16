@@ -58,13 +58,13 @@
       height: 50px;
     }
     .name {
-      margin: 2px;
-      padding: 6px;
-      width: 140px;
-      height: 40px;
-      font-size: 24px;
-      line-height: 1.2;
-      border-radius: 5px;
+      margin: 4px;
+      padding: 8px;
+      width: 180px;
+      height: 60px;
+      font-size: 36px;
+      line-height: 1.3;
+      border-radius: 6px;
       background-color: #b7eb8f;
       text-align: center;
       touch-action: none;
@@ -85,12 +85,10 @@
       font-size: 20px;
     }
     button {
-      margin-top: 15px;
-      padding: 12px 24px;
-      font-size: 20px;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
+      flex: 1;
+      padding: 20px;
+      font-size: 32px;
+      border-radius: 10px;
     }
     .title {
       font-weight: bold;
@@ -149,10 +147,11 @@
     </div>
   </div>
 </div>
-
-<button onclick="generateMessage()">產生出勤訊息</button>
-<button onclick="sendToLine()">📤 傳送到 LINE 分享介面</button>
-<button onclick="copyAndOpenLINE()">📋 複製並開啟 LINE</button>
+<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 20px;">
+  <button onclick="generateMessage()">產生出勤訊息</button>
+  <button onclick="sendToLine()">📤 傳送到 LINE 分享介面</button>
+  <button onclick="copyAndOpenLINE()">📋 複製並開啟 LINE</button>
+</div>
 <div id="result"></div>
 
 <div id="nameInputArea">
