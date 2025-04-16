@@ -60,7 +60,7 @@
     .name {
       margin: 4px;
       padding: 10px;
-      width: 220px;
+      width: 200px;
       height: 60px;
       font-size: 36px;
       line-height: 1.3;
@@ -159,6 +159,8 @@
   <h3>✍️ 修改人員名單</h3>
   <label for="names">請輸入完整人員資訊（每行如：李兆麟小隊長（特搜01））：</label>
   <textarea id="names">李兆麟小隊長(特搜01)
+王春傑小隊長(特搜02)
+潘威至小隊長(特搜03)
 周承則隊員(特搜04)
 吳耀堂隊員(特搜05)
 劉馥銘隊員(特搜06)
@@ -207,7 +209,7 @@
   function getList(id, simplified = false) {
     return Array.from(document.getElementById(id).querySelectorAll('.name')).map(d => {
       const text = d.dataset.full;
-      return simplified ? text.replace(/(小隊長|隊員)?（特搜\d+）/g, '').trim() : text;
+      return simplified ? text.replace(/(小隊長|隊員)?\(特搜\d+\)/g, '').trim() : text;
     });
   }
 
