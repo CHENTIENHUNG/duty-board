@@ -113,6 +113,7 @@
   </style>
 </head>
 <body>
+  <h2>特搜出勤白板</h2>
 <div class="container">
   <div class="column person-pool" id="pool">
     <div class="title">人員</div>
@@ -174,13 +175,14 @@
 
   function createMagnet(person) {
     const div = document.createElement('div');
-    const match = person.match(/^(.*?)\s*[^（]*（特搜(\d+)）/);
-    const name = match ? `${match[1]}（${match[2]}）` : person;
+    const match = person.match(/^(.*?)\s*(小隊長|隊員)?（特搜(\d+)）/);
+    const name = match ? match[1] + '（' + match[3] + '）' : person;
     div.className = 'name';
     div.textContent = name;
     div.dataset.full = person;
     return div;
   }
+
 
   function populateNames() {
     const pool = document.getElementById('pool');
