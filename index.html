@@ -220,12 +220,12 @@
     const car91 = getList('car91', true);
     const car71 = getList('car71', true);
 
-    let message = 特搜分隊火警出勤人車：\n;
-    if (leader.length > 0) message += 帶隊官：${leader[0]}\n;
-    if (car16.length > 0) message += 特搜16：${car16.join('、')}\n;
-    if (car61.length > 0) message += 特搜61：${car61.join('、')}\n;
-    if (car91.length > 0) message += 特搜91：${car91.join('、')}\n;
-    if (car71.length > 0) message += 特搜71：${car71.join('、')}\n;
+    let message = `特搜分隊火警出勤人車：\n`;
+    if (leader.length > 0) message += `帶隊官：${leader[0]}\n`;
+    if (car16.length > 0) message += `特搜16：${car16.join('、')}\n`;
+    if (car61.length > 0) message += `特搜61：${car61.join('、')}\n`;
+    if (car91.length > 0) message += `特搜91：${car91.join('、')}\n`;
+    if (car71.length > 0) message += `特搜71：${car71.join('、')}\n`;
 
     document.getElementById('result').textContent = message.trim();
   }
@@ -234,7 +234,7 @@
     generateMessage();
     const message = document.getElementById('result').textContent;
     const encoded = encodeURIComponent(message);
-    window.open(https://line.me/R/msg/text/?${encoded}, '_blank');
+    window.open(`https://line.me/R/msg/text/?${encoded}`, '_blank');
   }
 
   function copyAndOpenLINE() {
