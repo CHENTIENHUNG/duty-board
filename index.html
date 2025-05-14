@@ -2,7 +2,6 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>特搜出勤白板</title>
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
   <style>
@@ -10,21 +9,9 @@
       font-family: sans-serif;
       padding: 20px;
       background: #f0f0f0;
-      margin: 0;
     }
     h2 {
       text-align: center;
-    }
-    .sticky-pool {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      background: white;
-      border: 2px solid black;
-      border-radius: 8px;
-      padding: 10px;
-      box-sizing: border-box;
-      margin-bottom: 20px;
     }
     .container {
       display: flex;
@@ -40,8 +27,12 @@
       box-sizing: border-box;
       margin-bottom: 20px;
     }
+    .person-pool {
+      width: 22%;
+      min-width: 160px;
+    }
     .main-board {
-      width: 100%;
+      width: 76%;
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -128,10 +119,10 @@
 </head>
 <body>
 <h2>特搜出勤白板</h2>
-<div class="sticky-pool" id="pool">
-  <div class="title">人員</div>
-</div>
 <div class="container">
+  <div class="column person-pool" id="pool">
+    <div class="title">人員</div>
+  </div>
   <div class="column main-board">
     <div>
       <div class="title">帶隊官</div>
