@@ -115,10 +115,23 @@
       margin-top: 10px;
       font-size: 20px;
     }
+    #addressInputArea {
+      margin: 20px 0;
+      font-size: 20px;
+    }
+    #addressInputArea input {
+      width: 100%;
+      padding: 8px;
+      font-size: 20px;
+    }
   </style>
 </head>
 <body>
 <h2>特搜出勤白板</h2>
+<div id="addressInputArea">
+  <label for="address">火警地址：</label>
+  <input type="text" id="address" placeholder="請輸入火警地址">
+</div>
 <div class="container">
   <div class="column person-pool" id="pool">
     <div class="title">人員</div>
@@ -178,7 +191,7 @@
 </div>
 <script>
   let allPersons = [];
-  const maxItems = 999; // ✅ 無限制
+  const maxItems = 999;
 
   function createMagnet(person) {
      const div = document.createElement('div');
@@ -189,7 +202,6 @@
      div.dataset.full = person;
      return div;
   }
-
 
   function populateNames() {
     const pool = document.getElementById('pool');
@@ -219,8 +231,10 @@
     const car61 = getList('car61', true);
     const car91 = getList('car91', true);
     const car71 = getList('car71', true);
+    const address = document.getElementById('address').value.trim();
 
     let message = `特搜分隊火警出勤人車：\n`;
+    if (address) message += `火警地址：${address}\n`;
     if (leader.length > 0) message += `帶隊官：${leader[0]}\n`;
     if (car16.length > 0) message += `特搜16：${car16.join('、')}\n`;
     if (car61.length > 0) message += `特搜61：${car61.join('、')}\n`;
@@ -253,7 +267,7 @@
       group: 'shared',
       animation: 150,
       ghostClass: 'ghost',
-      direction: 'vertical', // ✅ 垂直排列
+      direction: 'vertical',
       onAdd: function (evt) {
         const to = evt.to;
         const from = evt.from;
