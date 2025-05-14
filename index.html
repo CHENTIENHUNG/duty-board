@@ -124,6 +124,16 @@
       padding: 8px;
       font-size: 20px;
     }
+
+    /* 平板裝置縮小比例一半並置中顯示 */
+    @media screen and (min-width: 768px) and (max-width: 1024px) {
+      body {
+        transform: scale(0.5);
+        transform-origin: top center;
+        width: 200%;
+        overflow-x: hidden;
+      }
+    }
   </style>
 </head>
 <body>
