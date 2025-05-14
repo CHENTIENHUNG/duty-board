@@ -115,6 +115,22 @@
       margin-top: 10px;
       font-size: 20px;
     }
+
+    @media screen and (min-width: 768px) and (max-width: 1024px) {
+      .name {
+        font-size: 28px;
+        width: 180px;
+        height: 50px;
+      }
+          .dropzone, .leader-dropzone {
+        width: 180px;
+      }
+    
+      button {
+        font-size: 28px;
+        padding: 18px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -254,6 +270,9 @@
       animation: 150,
       ghostClass: 'ghost',
       direction: 'vertical', // ✅ 垂直排列
+      scroll: true,
+      scrollSensitivity: 30,
+      scrollSpeed: 10,
       onAdd: function (evt) {
         const to = evt.to;
         const from = evt.from;
