@@ -2,7 +2,6 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
   <title>特搜出勤白板</title>
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
   <style>
@@ -115,22 +114,6 @@
       height: 120px;
       margin-top: 10px;
       font-size: 20px;
-    }
-
-    @media screen and (min-width: 768px) and (max-width: 1024px) {
-      .name {
-        font-size: 28px;
-        width: 180px;
-        height: 50px;
-      }
-          .dropzone, .leader-dropzone {
-        width: 180px;
-      }
-    
-      button {
-        font-size: 28px;
-        padding: 18px;
-      }
     }
   </style>
 </head>
@@ -271,9 +254,6 @@
       animation: 150,
       ghostClass: 'ghost',
       direction: 'vertical', // ✅ 垂直排列
-      scroll: true,
-      scrollSensitivity: 30,
-      scrollSpeed: 10,
       onAdd: function (evt) {
         const to = evt.to;
         const from = evt.from;
