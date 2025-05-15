@@ -3,22 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <title>特搜出勤白板</title>
+
+  <!-- 引入 SortableJS 套件，讓元素可以拖曳排序 -->
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+
   <style>
+    /* 基本樣式設定 */
     body {
       font-family: sans-serif;
       padding: 20px;
       background: #f0f0f0;
     }
+
+    /* 標題置中 */
     h2 {
       text-align: center;
     }
+
+    /* 容器排版為彈性盒子 */
     .container {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       margin-top: 20px;
     }
+
+    /* 區塊通用設定 */
     .column {
       background: white;
       border: 2px solid black;
@@ -27,21 +37,29 @@
       box-sizing: border-box;
       margin-bottom: 20px;
     }
+
+    /* 人員池區塊寬度與最小寬度 */
     .person-pool {
       width: 22%;
       min-width: 160px;
     }
+
+    /* 主白板排班區塊 */
     .main-board {
       width: 76%;
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
+
+    /* 車輛欄位橫向排列 */
     .role-row {
       display: flex;
       justify-content: space-between;
       flex-wrap: wrap;
     }
+
+    /* 各區可放置磁鐵的欄位樣式 */
     .dropzone, .leader-dropzone {
       border: 1px dashed #aaa;
       padding: 5px;
@@ -51,12 +69,18 @@
       gap: 4px;
       overflow-y: auto;
     }
+
+    /* 車輛區塊高度設定 */
     .dropzone {
       height: 480px;
     }
+
+    /* 帶隊官區塊高度較小 */
     .leader-dropzone {
       height: 80px;
     }
+
+    /* 磁鐵樣式 */
     .name {
       margin: 4px;
       padding: 10px;
@@ -75,6 +99,8 @@
       white-space: nowrap;
       text-overflow: ellipsis;
     }
+
+    /* 顯示產生的出勤訊息 */
     #result {
       white-space: pre-line;
       margin-top: 20px;
@@ -84,6 +110,8 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.2);
       font-size: 24px;
     }
+
+    /* 三個按鈕排列 */
     .button-row {
       display: flex;
       flex-wrap: wrap;
@@ -91,17 +119,23 @@
       gap: 12px;
       margin-top: 20px;
     }
+
+    /* 按鈕樣式 */
     button {
       flex: 1;
       padding: 24px;
       font-size: 32px;
       border-radius: 10px;
     }
+
+    /* 標題樣式 */
     .title {
       font-weight: bold;
       margin-bottom: 5px;
       font-size: 26px;
     }
+
+    /* 名單輸入區樣式 */
     #nameInputArea {
       margin-top: 30px;
       background: white;
@@ -109,12 +143,16 @@
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
+
+    /* 名單輸入框樣式 */
     textarea {
       width: 100%;
       height: 120px;
       margin-top: 10px;
       font-size: 20px;
     }
+
+    /* 地址輸入區塊與輸入框 */
     #addressInputArea {
       margin: 20px 0;
       font-size: 20px;
@@ -125,7 +163,7 @@
       font-size: 20px;
     }
 
-    /* 平板裝置縮小比例一半並置中顯示 */
+    /* 平板裝置時縮小比例一半並置中顯示 */
     @media screen and (min-width: 1000px) and (max-width: 2000px) {
       body {
         transform: scale(0.5);
@@ -137,47 +175,48 @@
   </style>
 </head>
 <body>
+<!-- 主標題 -->
 <h2>特搜出勤白板</h2>
+
+<!-- 地址輸入區塊 -->
 <div id="addressInputArea">
   <label for="address">火警地址：</label>
   <input type="text" id="address" value="苗栗市">
 </div>
+
+<!-- 白板主體區塊 -->
 <div class="container">
+  <!-- 人員池：可拖曳人名 -->
   <div class="column person-pool" id="pool">
     <div class="title">人員</div>
   </div>
+
+  <!-- 排班主區域：帶隊官 + 車輛分配 -->
   <div class="column main-board">
     <div>
       <div class="title">帶隊官</div>
       <div class="leader-dropzone" id="leader"></div>
     </div>
     <div class="role-row">
-      <div>
-        <div class="title">特搜16</div>
-        <div class="dropzone" id="car16"></div>
-      </div>
-      <div>
-        <div class="title">特搜61</div>
-        <div class="dropzone" id="car61"></div>
-      </div>
-      <div>
-        <div class="title">特搜91</div>
-        <div class="dropzone" id="car91"></div>
-      </div>
-      <div>
-        <div class="title">特搜71</div>
-        <div class="dropzone" id="car71"></div>
-      </div>
+      <div><div class="title">特搜16</div><div class="dropzone" id="car16"></div></div>
+      <div><div class="title">特搜61</div><div class="dropzone" id="car61"></div></div>
+      <div><div class="title">特搜91</div><div class="dropzone" id="car91"></div></div>
+      <div><div class="title">特搜71</div><div class="dropzone" id="car71"></div></div>
     </div>
   </div>
 </div>
+
+<!-- 操作按鈕區 -->
 <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 20px;">
   <button onclick="generateMessage()">產生出勤訊息</button>
   <button onclick="sendToLine()">📤 傳送到 LINE 分享介面</button>
   <button onclick="copyAndOpenLINE()">📋 複製並開啟 LINE</button>
 </div>
+
+<!-- 顯示產生的結果訊息 -->
 <div id="result"></div>
 
+<!-- 名單編輯區 -->
 <div id="nameInputArea">
   <h3>✍️ 修改人員名單</h3>
   <label for="names">請輸入完整人員資訊（每行如：李兆麟小隊長（特搜01））：</label>
@@ -199,20 +238,22 @@
 黃煒修隊員(特搜16)</textarea>
   <button onclick="updateNames()">更新人員名單</button>
 </div>
+
 <script>
   let allPersons = [];
-  const maxItems = 999;
 
+  // 建立磁鐵 DIV（拖曳顯示用）
   function createMagnet(person) {
-     const div = document.createElement('div');
-     const match = person.match(/^(.*?)\s*(小隊長|隊員)?\(特搜(\d+)\)/);
-     const name = match ? match[1] + '(' + match[3] + ')' : person;
-     div.className = 'name';
-     div.textContent = name;
-     div.dataset.full = person;
-     return div;
+    const div = document.createElement('div');
+    const match = person.match(/^(.*?)\s*(小隊長|隊員)?\(特搜(\d+)\)/);
+    const name = match ? match[1] + '(' + match[3] + ')' : person;
+    div.className = 'name';
+    div.textContent = name;
+    div.dataset.full = person; // 儲存原始全名
+    return div;
   }
 
+  // 將所有人員加入人員池
   function populateNames() {
     const pool = document.getElementById('pool');
     pool.innerHTML = '<div class="title">人員</div>';
@@ -222,12 +263,14 @@
     });
   }
 
+  // 從 textarea 更新人員資料
   function updateNames() {
     const input = document.getElementById('names').value;
     allPersons = input.split('\n').map(n => n.trim()).filter(n => n);
     populateNames();
   }
 
+  // 取得欄位中的磁鐵文字（簡化可選）
   function getList(id, simplified = false) {
     return Array.from(document.getElementById(id).querySelectorAll('.name')).map(d => {
       const text = d.dataset.full;
@@ -235,6 +278,7 @@
     });
   }
 
+  // 產生訊息格式內容
   function generateMessage() {
     const leader = getList('leader');
     const car16 = getList('car16', true);
@@ -254,6 +298,7 @@
     document.getElementById('result').textContent = message.trim();
   }
 
+  // 用 LINE 連結傳送訊息（需手動送出）
   function sendToLine() {
     generateMessage();
     const message = document.getElementById('result').textContent;
@@ -261,6 +306,7 @@
     window.open(`https://line.me/R/msg/text/?${encoded}`, '_blank');
   }
 
+  // 複製訊息並開啟 LINE App
   function copyAndOpenLINE() {
     generateMessage();
     const message = document.getElementById('result').textContent;
@@ -272,6 +318,7 @@
     });
   }
 
+  // 為每個 dropzone 啟用拖曳功能
   ['pool','leader','car16','car61','car91','car71'].forEach(id => {
     new Sortable(document.getElementById(id), {
       group: 'shared',
@@ -284,15 +331,16 @@
         const item = evt.item;
 
         if (to.id === 'leader') {
-          const clone = item.cloneNode(true);
+          const clone = item.cloneNode(true); // 複製一份放進去
           from.insertBefore(clone, from.children[evt.oldIndex]);
         } else if (from.id === 'leader') {
-          item.remove();
+          item.remove(); // 從 leader 拖出時刪除原本磁鐵
         }
       }
     });
   });
 
+  // 頁面載入完成自動初始化名單
   document.addEventListener('DOMContentLoaded', () => {
     updateNames();
   });
