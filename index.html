@@ -288,9 +288,9 @@
     const car61 = getList('car61', true);
     const car91 = getList('car91', true);
     const car71 = getList('car71', true);
-    const car72 = getList('car71', true);
-    const car41 = getList('car71', true);
-    const car76 = getList('car71', true);
+    const car72 = getList('car72', true);
+    const car41 = getList('car41', true);
+    const car76 = getList('car76', true);
     const address = document.getElementById('address').value.trim();
 
     let message = `特搜分隊火警出勤人車：\n`;
@@ -300,9 +300,9 @@
     if (car61.length > 0) message += `特搜61：${car61.join('、')}\n`;
     if (car91.length > 0) message += `特搜91：${car91.join('、')}\n`;
     if (car71.length > 0) message += `特搜71：${car71.join('、')}\n`;
-    if (car72.length > 0) message += `特搜71：${car72.join('、')}\n`;
-    if (car41.length > 0) message += `特搜71：${car41.join('、')}\n`;
-    if (car76.length > 0) message += `特搜71：${car76.join('、')}\n`;
+    if (car72.length > 0) message += `特搜70：${car72.join('、')}\n`;
+    if (car41.length > 0) message += `特搜41：${car41.join('、')}\n`;
+    if (car76.length > 0) message += `特搜76：${car76.join('、')}\n`;
 
     document.getElementById('result').textContent = message.trim();
   }
