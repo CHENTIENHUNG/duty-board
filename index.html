@@ -202,6 +202,9 @@
       <div><div class="title">特搜61</div><div class="dropzone" id="car61"></div></div>
       <div><div class="title">特搜91</div><div class="dropzone" id="car91"></div></div>
       <div><div class="title">特搜71</div><div class="dropzone" id="car71"></div></div>
+      <div><div class="title">特搜72</div><div class="dropzone" id="car71"></div></div>
+      <div><div class="title">特搜41</div><div class="dropzone" id="car71"></div></div>
+      <div><div class="title">特搜76</div><div class="dropzone" id="car71"></div></div>
     </div>
   </div>
 </div>
@@ -285,6 +288,10 @@
     const car61 = getList('car61', true);
     const car91 = getList('car91', true);
     const car71 = getList('car71', true);
+    const car72 = getList('car72', true);
+    const car41 = getList('car41', true);
+    const car76 = getList('car76', true);
+
     const address = document.getElementById('address').value.trim();
 
     let message = `特搜分隊火警出勤人車：\n`;
@@ -294,6 +301,10 @@
     if (car61.length > 0) message += `特搜61：${car61.join('、')}\n`;
     if (car91.length > 0) message += `特搜91：${car91.join('、')}\n`;
     if (car71.length > 0) message += `特搜71：${car71.join('、')}\n`;
+    if (car72.length > 0) message += `特搜72：${car72.join('、')}\n`;
+    if (car41.length > 0) message += `特搜41：${car41.join('、')}\n`;
+    if (car76.length > 0) message += `特搜76：${car76.join('、')}\n`;
+
 
     document.getElementById('result').textContent = message.trim();
   }
@@ -319,7 +330,7 @@
   }
 
   // 為每個 dropzone 啟用拖曳功能
-  ['pool','leader','car16','car61','car91','car71'].forEach(id => {
+  ['pool','leader','car16','car61','car91','car71','car72','car41','car76'].forEach(id => {
     new Sortable(document.getElementById(id), {
       group: 'shared',
       animation: 150,
